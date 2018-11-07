@@ -16,6 +16,8 @@ public interface QuoteRepository extends CrudRepository<Quote, Long>{
 
   List<Quote> findAllBySourceContainingOrderBySourceAscTextAsc(String fragment);
 
+  List<Quote> findAllBySourceContainingAndTextContainingOrderBySourceAscTextAsc(String sourceFrag, String textFrag);
+
   @Query(value = "SELECT * FROM Quote ORDER BY RANDOM() FETCH FIRST 1 ROW ONLY", nativeQuery = true)
   Optional<Quote> findRandom();
 
