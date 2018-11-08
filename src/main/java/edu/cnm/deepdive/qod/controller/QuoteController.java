@@ -1,8 +1,10 @@
 package edu.cnm.deepdive.qod.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import edu.cnm.deepdive.qod.model.dao.QuoteRepository;
 import edu.cnm.deepdive.qod.model.entity.Quote;
+import edu.cnm.deepdive.qod.view.Nested;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@ExposesResourceFor(Quote.class)
+
 @RestController//a controller where the return value of the methods in this class will be assumed to be the actual body that goes back to the client
 @RequestMapping("/quotes") //gives mapping onto the base url
+@JsonView(Nested.class)
 public class QuoteController {
 
   private QuoteRepository quoteRepository;
@@ -52,25 +55,21 @@ public class QuoteController {
     return quoteRepository.findAllBySourceContainingOrderBySourceAscTextAsc(fragment);
   }
 
-  @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<Quote> search(@RequestParam("sourceFrag") String sourceFrag, @RequestParam("textFrag") String textFrag){
-    return quoteRepository.findAllBySourceContainingAndTextContainingOrderBySourceAscTextAsc(sourceFrag, textFrag);
-  }
+//  @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_VALUE)
+//  public List<Quote> search(@RequestParam("sourceFrag") String sourceFrag, @RequestParam("textFrag") String textFrag){
+//    return quoteRepository.findAllBySourceContainingAndTextContainingOrderBySourceAscTextAsc(sourceFrag, textFrag);
+//  }
 
   @GetMapping(value = "{quoteId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonView(Nested.class)
   public Quote get(@PathVariable("quoteId") long quoteId){
     return quoteRepository.findById(quoteId).get();
   }
 
   @GetMapping(value = "random", produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonView(Nested.class)
   public Quote random(){
     return quoteRepository.findRandom().get();
-  }
-
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Quote> post(@RequestBody Quote quote){
-    quoteRepository.save(quote);
-    return ResponseEntity.created(null).body(quote);
   }
 
   @DeleteMapping(value = "{quoteId}")
