@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import edu.cnm.deepdive.qod.view.Flat;
 import java.net.URI;
 import java.util.Date;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.lang.NonNull;
@@ -39,9 +41,10 @@ public class Source {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "source_id", nullable = false, updatable = false)
-  private long id;
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(name = "source_id", columnDefinition = "CHAR(16) FOR BIT DATA", nullable = false, updatable = false)
+  private UUID id;
 
   @NonNull
   @CreationTimestamp
@@ -53,7 +56,7 @@ public class Source {
   @Column(length = 1024, nullable = false, unique = true)
   private String name;
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 

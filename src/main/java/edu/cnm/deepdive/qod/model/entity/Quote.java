@@ -7,6 +7,7 @@ import edu.cnm.deepdive.qod.view.Flat;
 import edu.cnm.deepdive.qod.view.Nested;
 import java.net.URI;
 import java.util.Date;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +47,10 @@ public class Quote {
   }
 
   @Id//this means this is the key value
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "quote_id", nullable = false, updatable = false)
-  private long id;
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name="uuid2", strategy = "uuid2")
+  @Column(name = "quote_id", columnDefinition = "CHAR(16) FOR BIT DATA", nullable = false, updatable = false)
+  private UUID id;
 
   @NonNull//this means hibernate will prevent a null from getting passed in
   @CreationTimestamp
@@ -66,7 +69,7 @@ public class Quote {
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Source source;
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 

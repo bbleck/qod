@@ -6,6 +6,7 @@ import edu.cnm.deepdive.qod.model.entity.Source;
 import edu.cnm.deepdive.qod.view.Nested;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class SourceController {
 
   @GetMapping(value = "{sourceId}", produces = MediaType.APPLICATION_JSON_VALUE)
   @JsonView(Nested.class)
-  public Source get(@PathVariable("sourceId") long sourceId){
+  public Source get(@PathVariable("sourceId") UUID sourceId){
     return sourceRepository.findById(sourceId).get();
   }
 
@@ -59,7 +60,7 @@ public class SourceController {
   }
   @DeleteMapping(value = "{sourceId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable("sourceId") long sourceId){
+  public void delete(@PathVariable("sourceId") UUID sourceId){
     sourceRepository.delete(get(sourceId));
   }
 
